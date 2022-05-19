@@ -4,6 +4,7 @@ import Dashboard from '../views/Dashboard.vue';
 import Login from '../views/Login.vue';
 import Products from '../views/Products.vue';
 import Users from '../views/Users.vue';
+import Settings from '../views/Settings.vue';
 import NotFound from '../views/NotFound.vue';
 
 Vue.use(VueRouter);
@@ -29,6 +30,11 @@ const routes = [
 		path: '/uzivatele',
 		name: 'Users',
 		component: Users,
+	},
+	{
+		path: '/nastaveni',
+		name: 'Settings',
+		component: Settings,
 	},
 	{
 		path: '/:pathMatch(.*)*',
