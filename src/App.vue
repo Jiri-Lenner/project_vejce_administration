@@ -143,14 +143,5 @@ export default {
 			],
 		};
 	},
-
-	watch: {
-		selectedItem(newValue) {
-			if (!newValue && newValue !== 0) {
-				this.selectedItem = 0;
-			}
-			console.log(newValue);
-		},
-	},
 };
 </script>
