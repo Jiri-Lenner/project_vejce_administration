@@ -1,24 +1,27 @@
-# app
+# Administration system
 
-## Project setup
+## About
+Administration system to manage content for the ecommerce website Kraslice Lennerová. 
+
+- Ecommerce website:  https://kraslicelennerova.cz/
+- Administration system: https://comfy-sable-030824.netlify.app/
+
+## Project setup and install dependencies
 ```
-npm install
+yarn install
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+yarn run serve
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+yarn run build
 ```
 
 ### Lints and fixes files
 ```
-npm run lint
+yarn run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
