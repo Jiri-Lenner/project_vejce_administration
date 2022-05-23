@@ -83,7 +83,7 @@
 			</v-list>
 		</v-navigation-drawer>
 		<v-main>
-			<v-container>
+			<v-container fill-height>
 				<router-view />
 			</v-container>
 		</v-main>

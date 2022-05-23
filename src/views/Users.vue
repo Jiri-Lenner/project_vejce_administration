@@ -1,5 +1,5 @@
 <template>
-	<div>Uživatele</div>
+	<v-container><div>Uzivatele</div></v-container>
 </template>
 
 <script>
