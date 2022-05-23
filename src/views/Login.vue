@@ -1,11 +1,13 @@
 <template>
 	<v-container
 		fill-height
+		fill-width
 		d-flex
 		align-center
 		justify-center
+		flex-column
 	>
-		<v-card>
+		<v-card width="35%" min-width="300px">
 			<v-form
 				class="pa-8"
 				v-model="valid"
@@ -18,6 +20,7 @@
 							v-model="email"
 							:rules="emailRules"
 							label="E-mail"
+							hint="Zadejte email"
 							required
 						></v-text-field>
 					</v-col>
@@ -31,16 +34,13 @@
 									? 'mdi-eye'
 									: 'mdi-eye-off'
 							"
-							:rules="[
-								rules.required,
-								rules.min,
-							]"
+							:rules="[rules.required]"
 							:type="
 								show ? 'text' : 'password'
 							"
 							name="heslo"
 							label="Heslo"
-							hint="Alespoň 8 znaků"
+							hint="Zadejte heslo"
 							class="input-group--focused"
 							@click:append="show = !show"
 						></v-text-field>
@@ -54,11 +54,18 @@
 							:loading="loading"
 							color="primary"
 							class="ma-0"
-							@click="validate"
+							@click="signIn"
 						>
 							Přihlásit
 						</v-btn>
 					</v-col>
+				</v-row>
+				<v-row>
+					<v-col
+						><v-alert type="error" v-if="error">
+							Chyba během přihlašování!
+						</v-alert></v-col
+					>
 				</v-row>
 			</v-form>
 		</v-card>
@@ -74,11 +81,12 @@ export default {
 			email: '',
 			password: '',
 			loading: false,
+
+			error: false,
+
 			rules: {
 				required: value =>
-					!!value || 'Zadejte jméno',
-				min: v =>
-					v.length >= 8 || 'Minimalně 8 znaků',
+					!!value || 'Zadejte heslo',
 			},
 			valid: true,
 			emailRules: [
@@ -90,28 +98,45 @@ export default {
 		};
 	},
 	methods: {
-		async validate() {
+		// FIX backend => split middleware
+		// FIX backend error naming
+
+		// TODO learn about refresh token access token (two token relation administration)
+		// FIX BCRYPT => nebo crypto => hash password
+
+		async signIn() {
 			const validation = this.$refs.form.validate();
 
 			if (validation) {
 				this.loading = true;
-				const response = await fetch(
-					'http://localhost:3000/api/v1/users/login',
-					{
-						method: 'POST',
-						headers: {
-							'Content-Type':
-								'application/json',
-						},
 
-						body: JSON.stringify({
-							data: {
-								password: this.password,
-								email: this.email,
+				let response;
+				try {
+					response = await fetch(
+						'http://localhost:3000/api/v1/users/login',
+						{
+							method: 'POST',
+							headers: {
+								'Content-Type':
+									'application/json',
 							},
-						}),
-					}
-				);
+
+							body: JSON.stringify({
+								data: {
+									password: this.password,
+									email: this.email,
+								},
+							}),
+						}
+					);
+				} catch (err) {
+					this.error = true;
+
+					// return function
+					this.loading = false;
+					return;
+				}
+
 				const formatedResponse =
 					await response.json();
 
@@ -123,17 +148,26 @@ export default {
 					);
 
 					// requst data for the users profile!!
-					const userData = await fetch(
-						`http://localhost:3000/api/v1/users/info/${formatedResponse.sub}`,
-						{
-							method: 'POST',
-							headers: {
-								'Content-Type':
-									'application/json',
-								Authorization: `Bearer ${this.$store.state.token}`,
-							},
-						}
-					);
+					let userData;
+					try {
+						userData = await fetch(
+							`http://localhost:3000/api/v1/users/info/${formatedResponse.sub}`,
+							{
+								method: 'POST',
+								headers: {
+									'Content-Type':
+										'application/json',
+									Authorization: `Bearer ${this.$store.state.token}`,
+								},
+							}
+						);
+					} catch (err) {
+						this.error = true;
+
+						// return function
+						this.loading = false;
+						return;
+					}
 					const formatedUserData = (
 						await userData.json()
 					).data.user;
@@ -147,13 +181,20 @@ export default {
 					// redirect
 					this.$router.push({name: 'Dashboard'});
 				} else {
-					// show error alert and clear the form
+					// show error alert and clear the form => wrong password
+					this.error = true;
 				}
+
 				this.loading = false;
-				// TODO => mounted => check token by requesting users data => if expired => login
-				// TODO => role => admin => can see the users panel
+
+				// TODO => OPRAVIT FOOTER
 			}
 		},
+	},
+	mounted() {
+		if (this.$store.state.token) {
+			this.$router.push('/dashboard');
+		}
 	},
 };
 </script>
