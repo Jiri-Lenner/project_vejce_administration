@@ -84,7 +84,7 @@
 				</v-list-item-group>
 			</v-list>
 		</v-navigation-drawer>
-		<v-main class="pb-sm-">
+		<v-main class="pb-sm-10 pb-xs-100">
 			<v-container fill-height align-start>
 				<router-view />
 			</v-container>
@@ -122,7 +122,10 @@
 export default {
 	name: 'App',
 	components: {},
-
+	onIdle() {
+		console.log('Idle');
+		this.signOut();
+	},
 	computed: {
 		filteredItems() {
 			if (!this.$store.state.user.admin) {

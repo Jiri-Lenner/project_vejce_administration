@@ -22,12 +22,14 @@
 							label="E-mail"
 							hint="Zadejte email"
 							required
+							@keyup.enter="signIn"
 						></v-text-field>
 					</v-col>
 				</v-row>
 				<v-row>
 					<v-col>
 						<v-text-field
+							@keyup.enter="signIn"
 							v-model="password"
 							:append-icon="
 								show
@@ -61,8 +63,8 @@
 					</v-col>
 				</v-row>
 				<v-row>
-					<v-col
-						><v-alert type="error" v-if="error">
+					<v-col v-if="error"
+						><v-alert type="error">
 							Chyba během přihlašování!
 						</v-alert></v-col
 					>
@@ -98,10 +100,13 @@ export default {
 		};
 	},
 	methods: {
-		// TODO learn about refresh token access token (two token relation administration)
-		// FIX footer
-		// make přihlasit se on enter
-
+		// TODO learn about refresh token access token (two token relation administration
+		// FIX make přihlasit se on enter
+		// FIX odstranit z listu
+		// TODO auto odhlašování!
+		// TODO přidávání userů
+		// TODO mazání userů
+		// TODO Editování userů
 		async signIn() {
 			const validation = this.$refs.form.validate();
 

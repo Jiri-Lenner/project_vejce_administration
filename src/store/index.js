@@ -36,6 +36,7 @@ export default new Vuex.Store({
 		},
 		resetUser(state) {
 			state.user = {};
+			state.userId = '';
 		},
 		// TODO => namespaced store + vuex modules
 		// vuex getters + actions only
