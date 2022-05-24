@@ -9,7 +9,28 @@
 				<v-col class="grow">
 					Chyba při načítání dat!
 				</v-col>
-				<v-col class="shrink">
+				<v-col
+					v-if="!operationError"
+					class="shrink"
+				>
+					<v-btn @click="loadData"
+						>Zkusit znovu</v-btn
+					>
+				</v-col>
+			</v-row> </v-alert
+		><v-alert
+			prominent
+			type="error"
+			v-if="operationError"
+		>
+			<v-row align="center">
+				<v-col class="grow">
+					Nelze provést operaci
+				</v-col>
+				<v-col
+					v-if="!operationError"
+					class="shrink"
+				>
 					<v-btn @click="loadData"
 						>Zkusit znovu</v-btn
 					>
@@ -62,15 +83,87 @@
 							</v-icon>
 							Upravit</v-btn
 						>
-						<v-btn
-							dark
-							class="red accent-2 ml-4"
-						>
-							<v-icon left
-								>mdi-trash-can</v-icon
-							>
-							Odstranit</v-btn
-						>
+
+						<template>
+							<div class="text-center">
+								<v-dialog
+									v-model="dialog"
+									width="500"
+								>
+									<template
+										v-slot:activator="{
+											on,
+											attrs,
+										}"
+									>
+										<v-btn
+											dark
+											class="red accent-2 ml-4"
+											v-bind="attrs"
+											v-on="on"
+										>
+											<v-icon left
+												>mdi-trash-can</v-icon
+											>
+											Smazat</v-btn
+										>
+									</template>
+
+									<v-card>
+										<v-card-title
+											dark
+											class="text-h5 blue darken-2 white--text"
+										>
+											Smazání
+											uživatele:
+										</v-card-title>
+
+										<v-card-title
+											class="text-h5"
+										>
+											{{
+												user.userName
+											}}
+										</v-card-title>
+
+										<v-card-text>
+											{{
+												user.admin
+													? 'Admin'
+													: 'Uživatel'
+											}}
+										</v-card-text>
+
+										<v-divider></v-divider>
+
+										<v-card-actions>
+											<v-spacer></v-spacer>
+											<v-btn
+												color="error"
+												dark
+												@click="
+													dialog = false
+												"
+											>
+												Zrušit
+											</v-btn>
+											<v-btn
+												color="success"
+												dark
+												@click="
+													dialog = false;
+													deleteUser(
+														user._id
+													);
+												"
+											>
+												Smazat
+											</v-btn>
+										</v-card-actions>
+									</v-card>
+								</v-dialog>
+							</div>
+						</template>
 					</v-card-actions>
 				</v-card>
 			</v-col>
@@ -85,6 +178,8 @@ export default {
 		return {
 			error: false,
 			loading: false,
+			operationError: false,
+			dialog: false,
 			users: [],
 		};
 	},
@@ -125,7 +220,39 @@ export default {
 			);
 			this.loading = false;
 		},
+		async deleteUser(_id) {
+			if (!this.$store.state.token) {
+				this.$router.push('/login');
+			}
+
+			// delete user
+
+			try {
+				await fetch(
+					`http://localhost:3000/api/v1/users/${_id}`,
+					{
+						method: 'DELETE',
+						headers: {
+							'Content-Type':
+								'application/json',
+							Authorization: `Bearer ${this.$store.state.token}`,
+						},
+					}
+				);
+			} catch (err) {
+				this.operationError = true;
+				// return function
+				return;
+			}
+
+			this.operationError = false;
+
+			this.users = this.users.filter(
+				user => user._id !== _id
+			);
+		},
 	},
+
 	mounted() {
 		this.loadData();
 	},
