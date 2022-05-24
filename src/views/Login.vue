@@ -100,6 +100,7 @@ export default {
 	methods: {
 		// TODO learn about refresh token access token (two token relation administration)
 		// FIX footer
+		// make přihlasit se on enter
 
 		async signIn() {
 			const validation = this.$refs.form.validate();

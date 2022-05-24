@@ -84,24 +84,19 @@
 				</v-list-item-group>
 			</v-list>
 		</v-navigation-drawer>
-		<v-main>
+		<v-main class="pb-sm-">
 			<v-container fill-height align-start>
 				<router-view />
 			</v-container>
 		</v-main>
-		<v-footer inset padless d-flex>
-			<v-container>
+		<v-footer app inset absolute padless>
+			<v-container class="px-6">
 				<v-row justify="center">
 					<v-col
 						cols="12"
-						class="col-md-6 col-sm-12 col-xs-12"
-						style="
-							display: flex !important;
-							justify-content: center !important;
-						"
+						class="col-md-6 col-sm-6 col-xs-12 pa-0"
 						><p
-							class="ma-0 pa-2 px-3 grey--text text--darken-1"
-							style="display: inline"
+							class="ma-0 pa-2 px-3 grey--text text--darken-1 text-center text-md-left text-sm-left"
 						>
 							Jiří Lenner Junior ⏤ v1.0
 						</p></v-col
@@ -109,15 +104,10 @@
 
 					<v-col
 						cols="12"
-						class="col-md-6 col-sm-12 col-xs-12"
-						style="
-							display: flex !important;
-							justify-content: center !important;
-						"
+						class="col-md-6 col-sm-6 col-xs-12 pa-0"
 					>
 						<p
-							class="ma-0 pa-2 px-3 grey--text text--darken-1"
-							style="display: inline"
+							class="ma-0 pa-2 px-3 grey--text text--darken-1 text-center text-md-right text-sm-right"
 						>
 							© Vlastimila Lennerová 2022
 						</p></v-col
