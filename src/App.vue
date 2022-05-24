@@ -85,30 +85,45 @@
 			</v-list>
 		</v-navigation-drawer>
 		<v-main>
-			<v-container fill-height>
+			<v-container fill-height align-start>
 				<router-view />
 			</v-container>
 		</v-main>
+		<v-footer inset padless d-flex>
+			<v-container>
+				<v-row justify="center">
+					<v-col
+						cols="12"
+						class="col-md-6 col-sm-12 col-xs-12"
+						style="
+							display: flex !important;
+							justify-content: center !important;
+						"
+						><p
+							class="ma-0 pa-2 px-3 grey--text text--darken-1"
+							style="display: inline"
+						>
+							Jiří Lenner Junior ⏤ v1.0
+						</p></v-col
+					>
 
-		<v-footer app inset padless d-flex>
-			<p
-				class="ma-0 pa-2 px-3 grey--text text--darken-1"
-			>
-				Jiří Lenner Junior ⏤ v1.0
-			</p>
-
-			<v-spacer></v-spacer>
-
-			<p
-				class="ma-0 pa-2 px-3 grey--text text--darken-1"
-			>
-				© Vlastimila Lennerová 2022
-			</p>
-
-			<!-- <p><
-				Designed and Produced by Jiří Lenner Junior
-			</p>
-			<p>© Vlastimila Lennerová 2022</p> -->
+					<v-col
+						cols="12"
+						class="col-md-6 col-sm-12 col-xs-12"
+						style="
+							display: flex !important;
+							justify-content: center !important;
+						"
+					>
+						<p
+							class="ma-0 pa-2 px-3 grey--text text--darken-1"
+							style="display: inline"
+						>
+							© Vlastimila Lennerová 2022
+						</p></v-col
+					>
+				</v-row>
+			</v-container>
 		</v-footer>
 	</v-app>
 </template>
@@ -127,6 +142,9 @@ export default {
 			} else {
 				return this.items;
 			}
+		},
+		windowWidth() {
+			return window.innerWidth;
 		},
 	},
 

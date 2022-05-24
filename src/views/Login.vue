@@ -98,11 +98,8 @@ export default {
 		};
 	},
 	methods: {
-		// FIX backend => split middleware
-		// FIX backend error naming
-
 		// TODO learn about refresh token access token (two token relation administration)
-		// FIX BCRYPT => nebo crypto => hash password
+		// FIX footer
 
 		async signIn() {
 			const validation = this.$refs.form.validate();
@@ -186,8 +183,6 @@ export default {
 				}
 
 				this.loading = false;
-
-				// TODO => OPRAVIT FOOTER
 			}
 		},
 	},
