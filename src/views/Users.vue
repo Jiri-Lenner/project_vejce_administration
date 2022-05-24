@@ -1,5 +1,8 @@
 <template>
 	<v-container align-start justify-start>
+		<v-alert type="success" v-if="success" text>
+			Operace úspěšně provedena
+		</v-alert>
 		<v-alert
 			prominent
 			type="error"
@@ -25,7 +28,7 @@
 		>
 			<v-row align="center">
 				<v-col class="grow">
-					Nelze provést operaci
+					Operaci nelze provést
 				</v-col>
 				<v-col
 					v-if="!operationError"
@@ -180,6 +183,7 @@ export default {
 			loading: false,
 			operationError: false,
 			dialog: false,
+			success: false,
 			users: [],
 		};
 	},
@@ -240,16 +244,26 @@ export default {
 					}
 				);
 			} catch (err) {
-				this.operationError = true;
-				// return function
+				this.setOperationFailed();
 				return;
 			}
-
-			this.operationError = false;
 
 			this.users = this.users.filter(
 				user => user._id !== _id
 			);
+			this.setSuccess();
+		},
+		setSuccess() {
+			this.success = true;
+			setTimeout(() => {
+				this.success = false;
+			}, 3000);
+		},
+		setOperationFailed() {
+			this.operationError = true;
+			setTimeout(() => {
+				this.operationError = false;
+			}, 3000);
 		},
 	},
 
