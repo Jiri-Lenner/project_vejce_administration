@@ -10,12 +10,13 @@
 			<v-app-bar-nav-icon
 				class="mr-2"
 				@click="drawer = !drawer"
+				v-if="this.$store.state.token"
 			></v-app-bar-nav-icon>
 
 			<h1 class="text-h6 font-weight-light" to="/">
 				Kraslice
 				<span class="font-weight-regular"
-					>Administrace</span
+					>Admin</span
 				>
 			</h1>
 			<v-img
@@ -26,9 +27,14 @@
 				class="ml-2"
 			></v-img>
 			<v-spacer></v-spacer>
-			<v-btn fab small depressed>
-				<v-icon>mdi-login</v-icon> </v-btn
-			><v-btn fab small depressed v-if="false">
+
+			<v-btn
+				fab
+				small
+				depressed
+				v-if="this.$store.state.token"
+				@click="signOut"
+			>
 				<v-icon>mdi-logout</v-icon>
 			</v-btn>
 		</v-app-bar>
@@ -37,22 +43,18 @@
 			clipped
 			v-model="drawer"
 			class="grey lighten-5"
+			v-if="this.$store.state.token"
 		>
 			<v-list-item two-line>
-				<v-list-item-avatar>
-					<img
-						src="https://randomuser.me/portraits/women/79.jpg"
-					/>
-				</v-list-item-avatar>
-
 				<v-list-item-content>
-					<v-list-item-title
-						>Pepinda
-						Marleyová</v-list-item-title
-					>
-					<v-list-item-subtitle
-						>Admin</v-list-item-subtitle
-					>
+					<v-list-item-title>{{
+						this.$store.state.user.userName
+					}}</v-list-item-title>
+					<v-list-item-subtitle>{{
+						this.$store.state.user.admin
+							? 'Admin'
+							: 'Uživatel'
+					}}</v-list-item-subtitle>
 				</v-list-item-content>
 			</v-list-item>
 
@@ -65,7 +67,7 @@
 					color="primary"
 				>
 					<v-list-item
-						v-for="item of items"
+						v-for="item of filteredItems"
 						:key="items.indexOf(item)"
 						:to="item.path"
 					>
@@ -82,29 +84,36 @@
 				</v-list-item-group>
 			</v-list>
 		</v-navigation-drawer>
-		<v-main>
-			<v-container>
+		<v-main class="pb-sm-10 pb-xs-100">
+			<v-container fill-height align-start>
 				<router-view />
 			</v-container>
 		</v-main>
+		<v-footer app inset absolute padless>
+			<v-container class="px-6">
+				<v-row justify="center">
+					<v-col
+						cols="12"
+						class="col-md-6 col-sm-6 col-xs-12 pa-0"
+						><p
+							class="ma-0 pa-2 px-3 grey--text text--darken-1 text-center text-md-left text-sm-left"
+						>
+							Jiří Lenner Junior ⏤ v1.0
+						</p></v-col
+					>
 
-		<v-footer app inset padless>
-			<v-col class="py-0">
-				<v-subheader
-					>Jiří Lenner Junior ⏤ v1.0
-				</v-subheader>
-			</v-col>
-
-			<v-col class="py-0">
-				<v-subheader class="justify-end">
-					© Pepinda Marleyová 2022
-				</v-subheader>
-			</v-col>
-
-			<!-- <p><
-				Designed and Produced by Jiří Lenner Junior
-			</p>
-			<p>© Vlastimila Lennerová 2022</p> -->
+					<v-col
+						cols="12"
+						class="col-md-6 col-sm-6 col-xs-12 pa-0"
+					>
+						<p
+							class="ma-0 pa-2 px-3 grey--text text--darken-1 text-center text-md-right text-sm-right"
+						>
+							© Vlastimila Lennerová 2022
+						</p></v-col
+					>
+				</v-row>
+			</v-container>
 		</v-footer>
 	</v-app>
 </template>
@@ -113,6 +122,24 @@
 export default {
 	name: 'App',
 	components: {},
+	onIdle() {
+		console.log('Idle');
+		this.signOut();
+	},
+	computed: {
+		filteredItems() {
+			if (!this.$store.state.user.admin) {
+				const items = [...this.items];
+				items.splice(2, 1);
+				return items;
+			} else {
+				return this.items;
+			}
+		},
+		windowWidth() {
+			return window.innerWidth;
+		},
+	},
 
 	data() {
 		return {
@@ -142,6 +169,44 @@ export default {
 				},
 			],
 		};
+	},
+	methods: {
+		signOut() {
+			this.$store.commit('resetUser');
+			this.$store.commit('resetToken');
+			this.$router.push('/login');
+		},
+	},
+	async beforeCreate() {
+		if (this.$store.state.token) {
+			let userData;
+			try {
+				userData = await fetch(
+					`http://localhost:3000/api/v1/users/info/${this.$store.state.userId}`,
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type':
+								'application/json',
+							Authorization: `Bearer ${this.$store.state.token}`,
+						},
+					}
+				);
+			} catch (err) {
+				this.$store.commit('resetUser');
+				this.$store.commit('resetToken');
+				if (this.$route.path !== '/login') {
+					this.$router.push('/login');
+				}
+				return;
+			}
+
+			const formatedUserData = (await userData.json())
+				.data.user;
+
+			// store the user data to store
+			this.$store.commit('setUser', formatedUserData);
+		}
 	},
 };
 </script>
