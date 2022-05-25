@@ -87,8 +87,10 @@ FIX -> Buttons to be responsive
 		</v-alert>
 
 		<!-- Users -->
+		<!-- Od nejmenšího po největší začínajíc cols -->
 		<v-row>
 			<v-col
+				cols="12"
 				class="col-lg-4 col-md-6 col-sm-12"
 				v-for="user of this.users"
 				:key="user._id"
@@ -101,32 +103,47 @@ FIX -> Buttons to be responsive
 						user.admin ? 'Admin' : 'Uživatel'
 					}}</v-card-subtitle>
 					<v-card-actions>
+						<v-container>
+							<v-row>
+								<v-col>
+									<v-btn
+										color="primary"
+										block
+										@click="
+											openEditDialog(
+												user._id
+											)
+										"
+									>
+										<v-icon left>
+											mdi-pencil
+										</v-icon>
+										Upravit</v-btn
+									>
+								</v-col>
+								<v-col>
+									<v-btn
+										dark
+										block
+										class="red accent-2"
+										@click="
+											openDeleteDialog(
+												user._id
+											)
+										"
+									>
+										<v-icon left
+											>mdi-trash-can</v-icon
+										>
+										Smazat</v-btn
+									>
+								</v-col>
+							</v-row>
+						</v-container>
+
 						<!-- Edit -->
-						<v-btn
-							color="primary"
-							@click="
-								openEditDialog(user._id)
-							"
-						>
-							<v-icon left>
-								mdi-pencil
-							</v-icon>
-							Upravit</v-btn
-						>
 
 						<!-- Delete -->
-						<v-btn
-							dark
-							class="red accent-2 ml-4"
-							@click="
-								openDeleteDialog(user._id)
-							"
-						>
-							<v-icon left
-								>mdi-trash-can</v-icon
-							>
-							Smazat</v-btn
-						>
 					</v-card-actions>
 				</v-card>
 			</v-col>
