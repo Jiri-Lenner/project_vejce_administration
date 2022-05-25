@@ -16,7 +16,7 @@
 			<h1 class="text-h6 font-weight-light" to="/">
 				Kraslice
 				<span class="font-weight-regular"
-					>Administrace</span
+					>Admin</span
 				>
 			</h1>
 			<v-img
@@ -177,7 +177,7 @@ export default {
 			this.$router.push('/login');
 		},
 	},
-	async created() {
+	async beforeCreate() {
 		if (this.$store.state.token) {
 			let userData;
 			try {
