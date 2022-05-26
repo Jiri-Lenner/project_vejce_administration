@@ -61,29 +61,24 @@ FIX -> Buttons to be responsive
 			</v-row>
 		</v-alert>
 		<v-alert class="grey lighten-2" v-if="loading">
-			<v-row align="center">
-				<v-col class="col-md-1 col-sm-2"
-					><v-btn
-						small
-						:loading="true"
-						:disabled="true"
-						color="info"
-						class="white--text"
-						fab
-					>
-						<v-icon dark>
-							mdi-cloud-upload
-						</v-icon>
-					</v-btn></v-col
+			<v-container d-flex align-center
+				><v-btn
+					small
+					:loading="true"
+					:disabled="true"
+					color="info"
+					class="white--text mr-4"
+					fab
 				>
-				<v-col class="ma-0 pl-0">
-					<h1
-						class="ma-0 text-h6 grey--text text--darken-3"
-					>
-						Načítání dat
-					</h1>
-				</v-col>
-			</v-row>
+					<v-icon dark> mdi-cloud-upload </v-icon>
+				</v-btn>
+
+				<h1
+					class="ma-0 text-h6 grey--text text--darken-3"
+				>
+					Načítání dat
+				</h1></v-container
+			>
 		</v-alert>
 
 		<!-- Users -->
@@ -105,7 +100,10 @@ FIX -> Buttons to be responsive
 					<v-card-actions>
 						<v-container>
 							<v-row>
-								<v-col>
+								<v-col
+									cols="12"
+									class="col-sm-6"
+								>
 									<v-btn
 										color="primary"
 										block
@@ -121,7 +119,10 @@ FIX -> Buttons to be responsive
 										Upravit</v-btn
 									>
 								</v-col>
-								<v-col>
+								<v-col
+									cols="12"
+									class="col-sm-6"
+								>
 									<v-btn
 										dark
 										block
@@ -520,7 +521,7 @@ export default {
 			let userData;
 			try {
 				userData = await fetch(
-					`http://localhost:3000/api/v1/users/info`,
+					`https://kraslicelennerova.cz/api/v1/users/info`,
 					{
 						method: 'POST',
 						headers: {
@@ -566,7 +567,7 @@ export default {
 			// delete user
 			try {
 				await fetch(
-					`http://localhost:3000/api/v1/users/${_id}`,
+					`https://kraslicelennerova.cz/api/v1/users/${_id}`,
 					{
 						method: 'DELETE',
 						headers: {
@@ -617,7 +618,7 @@ export default {
 				let userData;
 				try {
 					userData = await fetch(
-						`http://localhost:3000/api/v1/users/`,
+						`https://kraslicelennerova.cz/api/v1/users/`,
 						{
 							method: 'POST',
 							headers: {
@@ -712,7 +713,7 @@ export default {
 				let userData;
 				try {
 					userData = await fetch(
-						`http://localhost:3000/api/v1/users/${_id}`,
+						`https://kraslicelennerova.cz/api/v1/users/${_id}`,
 						{
 							method: 'PATCH',
 							headers: {

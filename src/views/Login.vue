@@ -116,7 +116,7 @@ export default {
 				let response;
 				try {
 					response = await fetch(
-						'http://localhost:3000/api/v1/users/login',
+						'https://kraslicelennerova.cz/api/v1/users/login',
 						{
 							method: 'POST',
 							headers: {
@@ -154,7 +154,7 @@ export default {
 					let userData;
 					try {
 						userData = await fetch(
-							`http://localhost:3000/api/v1/users/info/${formatedResponse.sub}`,
+							`https://kraslicelennerova.cz/api/v1/users/info/${formatedResponse.sub}`,
 							{
 								method: 'POST',
 								headers: {

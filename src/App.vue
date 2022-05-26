@@ -182,7 +182,7 @@ export default {
 			let userData;
 			try {
 				userData = await fetch(
-					`http://localhost:3000/api/v1/users/info/${this.$store.state.userId}`,
+					`https://kraslicelennerova.cz/api/v1/users/info/${this.$store.state.userId}`,
 					{
 						method: 'POST',
 						headers: {
@@ -201,11 +201,22 @@ export default {
 				return;
 			}
 
-			const formatedUserData = (await userData.json())
-				.data.user;
+			const formatedUserData = await userData.json();
+
+			if (!formatedUserData) {
+				this.$store.commit('resetUser');
+				this.$store.commit('resetToken');
+				if (this.$route.path !== '/login') {
+					this.$router.push('/login');
+				}
+				return;
+			}
 
 			// store the user data to store
-			this.$store.commit('setUser', formatedUserData);
+			this.$store.commit(
+				'setUser',
+				formatedUserData.data.user
+			);
 		}
 	},
 };
